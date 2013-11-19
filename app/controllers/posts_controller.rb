@@ -1,10 +1,13 @@
 class PostsController < ApplicationController
+  before_action :set_post, only: [:show, :edit, :update, :vote]
+  before_action :require_user, except: [:index, :show]
+
   def index
     @posts = Post.all
   end
 
   def show
-  	@post = Post.find(params[:id])
+    @comment = Comment.new
   end
 
   def new
@@ -14,7 +17,7 @@ class PostsController < ApplicationController
 
   def create
    @post = Post.new(post_params)
-   @post.user = User.first #this is only temporary
+   @post.user = current_user
   
 
    if @post.save
@@ -25,13 +28,9 @@ class PostsController < ApplicationController
    end
   end
 
-  def edit
-  	@post = Post.find(params[:id])
-  end
+  def edit; end
 
   def update
-  	@post = Post.find(params[:id])
-
   	if @post.update(post_params)
   		flash[:notice] = "Post was updated"
   		redirect_to posts_path
@@ -39,11 +38,27 @@ class PostsController < ApplicationController
   		render :edit
   	end
   end
+  
+  def vote
+    @vote = Vote.create(voteable: @post, user_id: current_user.id, vote: params[:vote])
 
+    if @vote.valid?
+      flash[:notice] = "Your vote was counted."
+    else
+      flash[:error] = "Your vote was not counted"
+    end
+
+    redirect_to :back
+  end
+  
   private
 
   def post_params
-  	params.require(:post).permit(:title, :url, :descripton)
+  	params.require(:post).permit(:title, :url, :description, category_ids: [])
+  end
+
+  def set_post
+     @post = Post.find(params[:id])
   end
 
 end
