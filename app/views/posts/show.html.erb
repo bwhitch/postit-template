@@ -14,41 +14,24 @@
 <hr/>
 
 <% if logged_in? %>
-<%= form_for [@post, @comment] do |f| %>
-  <%= render 'shared/errors', obj: @comment %>
- <div class='control-group'>
- 	<%= f.label :'Leave a comment' %>
- 	<%= f.text_area :comment, rows: 3, class: 'span4' %>
- </div>
+  <%= form_for [@post, @comment] do |f| %>
+    <%= render 'shared/errors', obj: @comment %>
+    <div class='control-group'>
+ 	    <%= f.label :'Leave a comment' %>
+ 	    <%= f.text_area :comment, rows: 3, class: 'span4' %>
+    </div>
   <%= f.submit "Create comment", class: "btn btn-primary" %>
- <% end %>
- <% end %>
-
- <h5> Comments: </h5>
-
- <div class="row">
-
-
-<% @post.comments.each do |comment| %>
-  <div class='span0 well text-center'>
-    <%= link_to vote_post_comment_path(post.comment, comment, vote: true), method: post do %>
-      <i class='icon-arrow-up'></i>
-      <% end %>
-    <br/>
-      <%#= comment.total_votes %>
-    <br/>
-    <%#= link_to vote_post_comment_path(comment, vote: false), method: post do %>
-      <i class='icon-arrow-down'></i>
-    <%# end %>
-  </div> 
-
-  <div class="span8 well">
-  	<em>"<%=comment.comment %>"</em>
-    <br/>
-  	<span class='quiet'>by</span> <%= link_to comment.user.username %> 
-  	at <small> <%= display_datetime(comment.created_at) %></small>
-  </div>
-</div>
+  <% end %>
 <% end %>
 
+<h5> Comments: </h5>
+<div class="row">
+ <% @post.comments.each do |comment| %>
+
+  
+
+ <%= render 'comments/comment', comment: comment %>
+
+ <% end %>
+</div>
 

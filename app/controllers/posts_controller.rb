@@ -12,14 +12,12 @@ class PostsController < ApplicationController
 
   def new
   	@post = Post.new
-
   end
 
   def create
    @post = Post.new(post_params)
    @post.user = current_user
   
-
    if @post.save
    	flash[:notice] = "Your post was created"
    	redirect_to posts_path
@@ -45,7 +43,7 @@ class PostsController < ApplicationController
     if @vote.valid?
       flash[:notice] = "Your vote was counted."
     else
-      flash[:error] = "Your vote was not counted"
+      flash[:error] = "You have previously voted on this post."
     end
 
     redirect_to :back
@@ -58,7 +56,7 @@ class PostsController < ApplicationController
   end
 
   def set_post
-     @post = Post.find(params[:id])
+     @post = Post.find_by(slug: params[:id])
   end
 
 end

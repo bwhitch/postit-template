@@ -28,17 +28,40 @@
 </div>
 
 <% if logged_in? %>
- <ul> Hi <%= current_user.username %> </ul> 
-<div class='nav_item' >  
+  <div class='nav_item' >  
       <%= link_to 'Log out', logout_path, class: 'btn btn-small' %>
-</div>
+  </div>
 
-<%else %>
-<div class='nav_item'>
+  <%else %>
+  <div class='nav_item'>
       <%= link_to 'Register', register_path, class: 'btn btn-primary btn-small' %>
-</div>
+  </div>
 
 <div class='nav_item'>
       <%= link_to 'Log in', login_path, class: 'btn btn-small' %>
 </div>
 <% end %>
+
+<% if logged_in? %>
+<div class='btn-group nav_item'>
+    <%= link_to '#', class: 'btn btn-small dropdown-toggle', 'data-toggle' => 'dropdown' do %>
+    <%= current_user.username %> <span class='caret'></span>
+    <% end %>
+    <ul class='dropdown-menu'>
+      <li><%= link_to edit_user_path(current_user) do %>
+        <i class='icon-pencil'></i>
+        edit profile
+          <% end %>
+      </li>
+      <li><%= link_to user_path(current_user) do %>
+        <i class='icon-user'></i>
+        view profile
+          <% end %>
+      <li><%= link_to logout_path do %>
+        <i class='icon-circle-arrow-left'></i>
+        logout
+        <% end %>
+      </li>
+    </ul>
+ </div>
+ <% end %>
